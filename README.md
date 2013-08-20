@@ -5,7 +5,28 @@ A way to queue requests when offline.
 ## Dependencies
 * [jQuery](http://jquery.com)
 
+## Optional
+* [Modernizr](http://modernizr.com)
+
 ## Demo
+
+## Usage
+
+#### Cumin.add
+
+Adds a request to then end of the queue
+
+* param url  [String] The URL to request
+* param data [Object] A JS object of any neccessary data (useful for POST requests)
+  * default: {}
+* param type [String] 'GET' or 'POST'
+  * default: 'GET'
+
+```js
+Cumin.add('http://url.com', {
+  foo: 'bar'
+}, 'POST');
+```
 
 ## Development
 
@@ -45,4 +66,5 @@ Simply run `testem`.  Run `testem -g` for Growl support.
 
 ### To-Do
 
-* TBD
+* Support Cookies as storage (if local storage isnt supported)
+* Support plain JS object as storage (if cookies arent supported)
