@@ -1,0 +1,1 @@
+describe 'jquery.cumin', ->
