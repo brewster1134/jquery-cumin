@@ -68,3 +68,6 @@ Simply run `testem`.  Run `testem -g` for Growl support.
 
 * Support Cookies as storage (if local storage isnt supported)
 * Support plain JS object as storage (if cookies arent supported)
+* Track failures and move to end of queue
+* If x amount of failures, remove from queue
+* support passing in users custom settings

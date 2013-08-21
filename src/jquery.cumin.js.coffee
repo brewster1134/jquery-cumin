@@ -8,6 +8,8 @@ https://github.com/brewster1134/jquery.cumin
 ((window, $) ->
   window.console ||= { log: -> }
   window.Cumin =
+    settings:
+      checkConnection: 2000
 
     # Checks if the script is on or offline
     #
@@ -18,6 +20,22 @@ https://github.com/brewster1134/jquery.cumin
         cache: false
 
       response.readyState == 4 && response.status == 200
+
+    start: ->
+      @timeout = setTimeout =>
+        if @isConnected()
+          for id, request of @queue()
+            $.ajax
+              url: request.url
+              data: request.data
+              type: request.type
+              success: =>
+                @remove id
+          @start()
+      , @settings.checkConnection
+
+    stop: ->
+      clearTimeout @timeout
 
     #
     # SHORTCUT METHODS TO STORAGE SPECIFIC METHODS
@@ -37,6 +55,11 @@ https://github.com/brewster1134/jquery.cumin
     #
     add: (url, data = {}, type = 'GET') -> @[@storageType]['add'](url, data, type)
 
+    # Removes a request from the queue
+    # @param id [String] the key name of the request in the queue
+    #
+    remove: (id) -> @[@storageType]['remove'](id)
+
     #
     # STORAGE TYPE SPECIFIC METHODS
     #
@@ -45,27 +68,33 @@ https://github.com/brewster1134/jquery.cumin
         JSON.parse localStorage.getItem 'cumin.queue'
 
       add: (url, data, type) ->
-        currentQueue = Cumin.queue()
+        id = new Date().getTime()
+        currentQueue = @queue()
         newRequest =
-          id: new Date().getTime()
           url: url
           data: data
           type: type
 
-        currentQueue.push newRequest
+        currentQueue[id] = newRequest
 
         # Save updated queue to localStorage
         localStorage.setItem 'cumin.queue', JSON.stringify(currentQueue)
 
-        return newRequest
+      remove: (id) ->
+        currentQueue = @queue()
+
+        delete currentQueue[id]
+
+        localStorage.setItem 'cumin.queue', JSON.stringify(currentQueue)
 
     # cookies:
 
     # jsObject:
 
+
   # Sets the best available storage type
   Cumin.storageType = if Modernizr?.localstorage || !!window['localStorage']
-    localStorage.setItem 'cumin.queue', JSON.stringify([])
+    localStorage.setItem 'cumin.queue', JSON.stringify({})
     'localStorage'
   else if navigator.cookieEnabled
     'cookies'
