@@ -1,25 +1,23 @@
 # jquery.cumin
-
 A way to queue requests when offline.
-
-## Dependencies
-* [jQuery](http://jquery.com)
-
-## Optional
-* [Modernizr](http://modernizr.com)
-
-## Demo
 
 ## Usage
 
-#### Cumin.add
+### Dependencies
+* [jQuery](http://jquery.com)
 
-Adds a request to then end of the queue
+### Optional
+* [Modernizr](http://modernizr.com)
 
-* param url  [String] The URL to request
-* param data [Object] A JS object of any neccessary data (useful for POST requests)
+### Methods
+
+##### Cumin.add
+Adds a request to the queue
+
+* param url     [String]  The URL to request
+* param data    [Object]  A JS object of any neccessary data (useful for POST requests)
   * default: {}
-* param type [String] 'GET' or 'POST'
+* param method  [String]  Http request methods ('GET', 'POST', etc.)
   * default: 'GET'
 
 ```js
@@ -40,34 +38,34 @@ Cumin.add('http://url.com', {
   * `bundle install`
 * Node.js & NPM
   * OS X
-    * [HomeBrew](http://mxcl.github.io/homebrew/) _recommended_
-      * 'brew install node'
+     * [HomeBrew](http://mxcl.github.io/homebrew/) _recommended_
+       * 'brew install node'
 * [Testem](https://github.com/airportyh/testem)
   * `npm install testem -g`
 
 ### Optional
-
 * [PhantomJS](http://phantomjs.org)
   * OS X
-    * [HomeBrew](http://mxcl.github.io/homebrew/) _recommended_
-      * `brew install phantomjs`
+     * [HomeBrew](http://mxcl.github.io/homebrew/) _recommended_
+       * `brew install phantomjs`
 * [Growl](http://growl.info/downloads)
   * OS X 10.8
 
 ### Compiling
-
 Do **NOT** modify any `.js` files!  Modify the coffee files in the `src` directory.  Guard will watch for changes and compile them to the `lib` directory.
 
 `bundle exec guard`
 
 ## Testing
+Simply run `testem`.
 
-Simply run `testem`.  Run `testem -g` for Growl support.
+Run `testem -g` for Growl support.
 
 ### To-Do
-
+* Demo
 * Support Cookies as storage (if local storage isnt supported)
 * Support plain JS object as storage (if cookies arent supported)
-* Track failures and move to end of queue
 * If x amount of failures, remove from queue
-* support passing in users custom settings
+* support user specified isConnected url to test
+* support passing in user settings
+* API for setting events & options

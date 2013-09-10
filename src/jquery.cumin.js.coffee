@@ -8,6 +8,8 @@ https://github.com/brewster1134/jquery.cumin
 ((window, $) ->
   window.console ||= { log: -> }
   window.Cumin =
+    events:
+      onQueueChange: undefined
     settings:
       checkConnection: 2000
 
@@ -37,6 +39,10 @@ https://github.com/brewster1134/jquery.cumin
     stop: ->
       clearTimeout @timeout
 
+    # EVENTS
+    #
+    onQueueChange: -> @events.onQueueChange? @queue()
+
     #
     # SHORTCUT METHODS TO STORAGE SPECIFIC METHODS
     #
@@ -53,12 +59,16 @@ https://github.com/brewster1134/jquery.cumin
     # @param type [String] 'GET' or 'POST'
     #   default: 'GET'
     #
-    add: (url, data = {}, type = 'GET') -> @[@storageType]['add'](url, data, type)
+    add: (url, data = {}, type = 'GET') ->
+      @[@storageType]['add'](url, data, type)
+      @onQueueChange()
 
     # Removes a request from the queue
     # @param id [String] the key name of the request in the queue
     #
-    remove: (id) -> @[@storageType]['remove'](id)
+    remove: (id) ->
+      @[@storageType]['remove'](id)
+      @onQueueChange()
 
     #
     # STORAGE TYPE SPECIFIC METHODS
@@ -93,8 +103,9 @@ https://github.com/brewster1134/jquery.cumin
 
 
   # Sets the best available storage type
-  Cumin.storageType = if Modernizr?.localstorage || !!window['localStorage']
-    localStorage.setItem 'cumin.queue', JSON.stringify({})
+  Cumin.storageType = if Modernizr?.localstorage || !!window.localStorage
+    unless window.localStorage.getItem 'cumin.queue'
+      localStorage.setItem 'cumin.queue', JSON.stringify({})
     'localStorage'
   else if navigator.cookieEnabled
     'cookies'
