@@ -51,6 +51,10 @@ https://github.com/brewster1134/jquery.cumin
     #
     queue: -> @[@storageType]['queue']()
 
+    # Clears the queue
+    #
+    clear: -> @[@storageType]['clear']()
+
     # Adds a request to the queue
     #
     # @param url  [String] The URL to request
@@ -77,6 +81,9 @@ https://github.com/brewster1134/jquery.cumin
       queue: ->
         JSON.parse localStorage.getItem 'cumin.queue'
 
+      clear: ->
+        localStorage.setItem 'cumin.queue', JSON.stringify({})
+
       add: (url, data, type) ->
         id = new Date().getTime()
         currentQueue = @queue()
@@ -100,7 +107,6 @@ https://github.com/brewster1134/jquery.cumin
     # cookies:
 
     # jsObject:
-
 
   # Sets the best available storage type
   Cumin.storageType = if Modernizr?.localstorage || !!window.localStorage

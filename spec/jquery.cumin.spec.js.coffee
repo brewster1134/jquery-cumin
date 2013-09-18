@@ -1,4 +1,9 @@
 describe 'Cumin', ->
+  queueLength = null
+
+  before ->
+    queueLength = -> Object.keys Cumin.queue()
+
   it 'should setup the objects', ->
     expect(Cumin).to.exist
     expect(Cumin.storageType).to.be.a('string')
@@ -15,14 +20,23 @@ describe 'Cumin', ->
       it 'should return an array', ->
         expect(Cumin.queue()).to.be.an('object')
 
+    describe '#clear', ->
+      before ->
+        localStorage.setItem 'cumin.queue', JSON.stringify({foo: 'bar'})
+        Cumin.clear()
+
+      it 'should clear the queue', ->
+        expect(Cumin.queue()).to.be.empty
+
     describe '#add', ->
       keys = null
 
       before ->
+        localStorage.setItem 'cumin.queue', JSON.stringify({})
         Cumin.add 'http://url',
           foo: 'bar'
         , 'POST'
-        keys = Object.keys Cumin.queue()
+        keys = queueLength()
 
       it 'should add a request to the queue', ->
         expect(keys).to.have.length(1)
@@ -36,4 +50,4 @@ describe 'Cumin', ->
         Cumin.remove 'foo'
 
       it 'should remove the request from the queue', ->
-        expect(Object.keys(Cumin.queue())).to.have.length(0)
+        expect(queueLength()).to.have.length(0)

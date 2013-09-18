@@ -69,3 +69,4 @@ Run `testem -g` for Growl support.
 * support user specified isConnected url to test
 * support passing in user settings
 * API for setting events & options
+* only return public methods
