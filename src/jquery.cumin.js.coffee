@@ -18,6 +18,7 @@ https://github.com/brewster1134/jquery.cumin
     isConnected: ->
       response = $.ajax
         url: window.location.href
+        type: 'GET'
         async: false
         cache: false
 
