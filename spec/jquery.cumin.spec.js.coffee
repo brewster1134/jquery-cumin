@@ -12,6 +12,31 @@ describe 'Cumin', ->
     it 'should return a boolean', ->
       expect(Cumin.isConnected()).to.be.a('boolean')
 
+  describe '#set', ->
+    before ->
+      Cumin.set 'foo', 'bar'
+
+    it 'should set settings', ->
+      expect(Cumin.settings.foo).to.exist
+      expect(Cumin.settings.foo).to.equal('bar')
+
+  describe '#setEvent', ->
+    before ->
+      Cumin.setEvent 'onFoo', 'bar'
+
+    it 'should set settings', ->
+      expect(Cumin.events.onFoo).to.exist
+      expect(Cumin.events.onFoo).to.equal('bar')
+
+  context 'when using events', ->
+    describe 'onQueueChange', ->
+      before ->
+        Cumin.events.onQueueChange = sinon.spy()
+        Cumin.add 'http://url'
+
+      it 'should be called when queue changes', ->
+        expect(Cumin.events.onQueueChange).to.be.called
+
   context 'when using localStorage', ->
     before ->
       Cumin.storageType = 'localStorage'

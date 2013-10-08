@@ -26,6 +26,29 @@ Cumin.add('http://url.com', {
 }, 'POST');
 ```
 
+##### Cumin.set & Cumin.setEvent
+Sets events and settings
+
+* param key   [String]  The name of the setting or event
+* param value [String]  The value of the setting or event
+
+```js
+Cumin.set('foo', 'bar');
+Cumin.setEvent('onFoo', 'bar');
+```
+
+###### Supported Settings
+* checkConnection [Integer] Time in milliseconds between checking if the app is connected to the internet or not
+  * default: 5000 # 5 seconds
+
+###### Supported Events
+* onQueueChange [Function] Function to be run after any change of the queue.
+
+Accepted Arguments:
+
+* queue   [Object]  The entire queue
+* type    [String]  The type of change made to the queue (add/remove)
+
 ## Development
 
 ### Dependencies
@@ -67,6 +90,4 @@ Run `testem -g` for Growl support.
 * Support plain JS object as storage (if cookies arent supported)
 * If x amount of failures, remove from queue
 * support user specified isConnected url to test
-* support passing in user settings
-* API for setting events & options
 * only return public methods

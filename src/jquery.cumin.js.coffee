@@ -11,7 +11,13 @@ https://github.com/brewster1134/jquery.cumin
     events:
       onQueueChange: undefined
     settings:
-      checkConnection: 2000
+      checkConnection: 5000
+
+    set: (key, value) ->
+      @settings[key] = value
+
+    setEvent: (key, value) ->
+      @events[key] = value
 
     # Checks if the script is on or offline
     #
@@ -42,7 +48,7 @@ https://github.com/brewster1134/jquery.cumin
 
     # EVENTS
     #
-    onQueueChange: -> @events.onQueueChange? @queue()
+    onQueueChange: (type) -> @events.onQueueChange? @queue(), type
 
     #
     # SHORTCUT METHODS TO STORAGE SPECIFIC METHODS
@@ -66,14 +72,14 @@ https://github.com/brewster1134/jquery.cumin
     #
     add: (url, data = {}, type = 'GET') ->
       @[@storageType]['add'](url, data, type)
-      @onQueueChange()
+      @onQueueChange 'add'
 
     # Removes a request from the queue
     # @param id [String] the key name of the request in the queue
     #
     remove: (id) ->
       @[@storageType]['remove'](id)
-      @onQueueChange()
+      @onQueueChange 'remove'
 
     #
     # STORAGE TYPE SPECIFIC METHODS
