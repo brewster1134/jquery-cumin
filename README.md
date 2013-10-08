@@ -11,7 +11,7 @@ A way to queue requests when offline.
 
 ### Methods
 
-##### Cumin.add
+#### Cumin.send
 Adds a request to the queue
 
 * param url     [String]  The URL to request
@@ -21,12 +21,12 @@ Adds a request to the queue
   * default: 'GET'
 
 ```js
-Cumin.add('http://url.com', {
+Cumin.send('http://url.com', {
   foo: 'bar'
 }, 'POST');
 ```
 
-##### Cumin.set & Cumin.setEvent
+#### Cumin.set & Cumin.setEvent
 Sets events and settings
 
 * param key   [String]  The name of the setting or event
@@ -37,17 +37,16 @@ Cumin.set('foo', 'bar');
 Cumin.setEvent('onFoo', 'bar');
 ```
 
-###### Supported Settings
-* checkConnection [Integer] Time in milliseconds between checking if the app is connected to the internet or not
-  * default: 5000                   # 5 seconds
-* connectionUrl   [String]  The url to make a GET request to check if the app is online.
+##### Supported Settings
+* checkConnectionDelay  [Integer] Time in milliseconds between checking if the app is connected to the internet or not
+  * default: 600000                 # 10 minutes
+* checkConnectionUrl    [String]  The url to make a GET request to check if the app is online.
   * default: window.location.href   # the url in the address bar of the browser
 
-###### Supported Events
+##### Supported Events
 * onQueueChange [Function] Function to be run after any change of the queue.
 
-Accepted Arguments:
-
+###### Accepted Arguments:
 * queue   [Object]  The entire queue
 * type    [String]  The type of change made to the queue (add/remove)
 
@@ -90,6 +89,6 @@ Run `testem -g` for Growl support.
 * Demo
 * Support Cookies as storage (if local storage isnt supported)
 * Support plain JS object as storage (if cookies arent supported)
-* If x amount of failures, remove from queue
-* support user specified isConnected url to test
+* If x amount of failures, remove from queue? move out of queue?
 * only return public methods
+* use setInterval instead of setTimeout
