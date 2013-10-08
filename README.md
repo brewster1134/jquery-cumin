@@ -39,7 +39,9 @@ Cumin.setEvent('onFoo', 'bar');
 
 ###### Supported Settings
 * checkConnection [Integer] Time in milliseconds between checking if the app is connected to the internet or not
-  * default: 5000 # 5 seconds
+  * default: 5000                   # 5 seconds
+* connectionUrl   [String]  The url to make a GET request to check if the app is online.
+  * default: window.location.href   # the url in the address bar of the browser
 
 ###### Supported Events
 * onQueueChange [Function] Function to be run after any change of the queue.

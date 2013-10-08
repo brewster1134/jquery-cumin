@@ -12,6 +12,7 @@ https://github.com/brewster1134/jquery.cumin
       onQueueChange: undefined
     settings:
       checkConnection: 5000
+      connectionUrl: window.location.href
 
     set: (key, value) ->
       @settings[key] = value
@@ -23,7 +24,7 @@ https://github.com/brewster1134/jquery.cumin
     #
     isConnected: ->
       response = $.ajax
-        url: window.location.href
+        url: @settings.connectionUrl
         type: 'GET'
         async: false
         cache: false
