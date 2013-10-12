@@ -38,10 +38,8 @@ Cumin.setEvent('onFoo', 'bar');
 ```
 
 ##### Supported Settings
-* checkConnectionDelay  [Integer] Time in milliseconds between checking if the app is connected to the internet or not
+* retryInterval  [Integer] Time in milliseconds between checking if the app is connected to the internet or not
   * default: 600000                 # 10 minutes
-* checkConnectionUrl    [String]  The url to make a GET request to check if the app is online.
-  * default: window.location.href   # the url in the address bar of the browser
 
 ##### Supported Events
 * onQueueChange [Function] Function to be run after any change of the queue.
@@ -91,4 +89,3 @@ Run `testem -g` for Growl support.
 * Support plain JS object as storage (if cookies arent supported)
 * If x amount of failures, remove from queue? move out of queue?
 * only return public methods
-* use setInterval instead of setTimeout

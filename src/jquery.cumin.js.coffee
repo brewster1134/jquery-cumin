@@ -1,7 +1,7 @@
 ###
 jquery.cumin
 https://github.com/brewster1134/jquery.cumin
-@version 0.0.3
+@version 0.0.4
 @author Ryan Brewster (@brewster1134)
 ###
 
@@ -11,8 +11,7 @@ https://github.com/brewster1134/jquery.cumin
     events:
       onQueueChange: undefined
     settings:
-      checkConnectionDelay: 600000
-      checkConnectionUrl: window.location.href
+      retryInterval: 600000
 
     # PUBLIC METHODS
     #
@@ -45,44 +44,35 @@ https://github.com/brewster1134/jquery.cumin
     # PRIVATE METHODS
     #
 
-    # Checks if the script is on or offline
-    #
-    isConnected: ->
-      response = $.ajax
-        url: @settings.checkConnectionUrl
-        type: 'GET'
-        async: false
-        cache: false
-
-      response.readyState == 4 && response.status == 200
-
     # Makes a request, or queues the request if there is a failure
     #
     request: (id, request) ->
-      if @isConnected()
-        $.ajax
-          url: request.url
-          data: request.data
-          type: request.type
-          cache: false
-          success: =>
-            @remove id
-          error: =>
-            request.sendCount += 1
-            @add id, request
+      $.ajax
+        url: request.url
+        data: request.data
+        type: request.type
+        cache: false
+        success: =>
+          @remove id
+        error: =>
+          request.sendCount += 1
+          @add id, request
 
     start: ->
       @stop()
-      @timeout = setTimeout =>
-        for id, request of @queue()
-          @request id, request
-        @start()
-      , @settings.checkConnectionDelay
+      @processQueue()
+      @interval = setInterval =>
+        @processQueue()
+      , @settings.retryInterval
       return Object.keys(@queue()).length # return queue length
 
+    processQueue: ->
+      for id, request of @queue()
+        @request id, request
+
     stop: ->
-      clearTimeout @timeout
-      @timeout = null
+      clearInterval @interval
+      @interval = null
       return Object.keys(@queue()).length # return queue length
 
     # EVENTS
