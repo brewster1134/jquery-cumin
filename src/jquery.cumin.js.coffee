@@ -52,11 +52,11 @@ https://github.com/brewster1134/jquery.cumin
         data: request.data
         type: request.type
         cache: false
-        success: =>
-          @remove id
-        error: =>
-          request.sendCount += 1
-          @add id, request
+      .done =>
+        @remove id
+      .fail =>
+        request.sendCount += 1
+        @add id, request
 
     start: ->
       @stop()

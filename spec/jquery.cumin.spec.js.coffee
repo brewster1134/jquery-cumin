@@ -1,9 +1,4 @@
 describe 'Cumin', ->
-  queueLength = null
-
-  before ->
-    queueLength = -> Object.keys Cumin.queue()
-
   it 'should setup the objects', ->
     expect(Cumin).to.exist
     expect(Cumin.storageType).to.be.a('string')
@@ -30,10 +25,7 @@ describe 'Cumin', ->
 
       before ->
         requestStub = sinon.stub Cumin, 'request'
-
-        Cumin.send 'url',
-          foo: 'bar'
-        , 'POST'
+        Cumin.send 'send'
 
       after ->
         requestStub.restore()
@@ -41,74 +33,145 @@ describe 'Cumin', ->
       it 'should send a request', ->
         expect(requestStub).to.be.called.once
 
-  describe '#isConnected', ->
-    it 'should return a boolean', ->
-      expect(Cumin.isConnected()).to.be.a('boolean')
+  context 'Private Methods', ->
+    describe '#request', ->
+      server = null
+      addSpy = null
+      removeSpy = null
 
-  describe '#request', ->
-    before ->
-      Cumin.add 'request'
-      Cumin.request 'request',
-        url: 'http://'
-        data: {}
-        type: 'GET'
-        sendCount: 1
-
-    it 'should increase the sendCount by 1', ->
-      expect(Cumin.queue()['request'].sendCount).to.equal(2)
-
-  context 'when using events', ->
-    describe 'onQueueChange', ->
       before ->
-        Cumin.setEvent 'onQueueChange', sinon.spy()
-        Cumin.add
-          url: 'http://url'
+        server = sinon.fakeServer.create()
+        addSpy = sinon.spy Cumin, 'add'
+        removeSpy = sinon.spy Cumin, 'remove'
 
-      it 'should be called when queue changes', ->
-        expect(Cumin.events.onQueueChange).to.be.called
+      after ->
+        server.restore()
+        addSpy.restore()
+        removeSpy.restore()
 
-  for storageType in ['localStorage']
-    context "when using #{storageType}", ->
+      afterEach ->
+        addSpy.reset()
+        removeSpy.reset()
+
+      context 'on success', ->
+        before ->
+          server.respondWith [200, {}, 'OK']
+
+          Cumin.request 'requestSuccess',
+            url: 'http://requestSuccess'
+            data: {}
+            type: 'GET'
+
+          server.respond()
+
+        it 'should not add request to the queue', ->
+          expect(removeSpy).to.be.called
+
+      context 'on error', ->
+        before ->
+          server.respondWith [500, {}, '']
+
+          Cumin.request 'requestError',
+            url: 'http://requestError'
+            data: {}
+            type: 'GET'
+            sendCount: 1
+
+          server.respond()
+
+        it 'should add request to the queue', ->
+          expect(addSpy).to.be.called
+
+        it 'should increase the sendCount by 1', ->
+          expect(Cumin.queue()['requestError'].sendCount).to.equal(2)
+
+    describe '#start', ->
+      stopSpy = null
+      processQueueSpy = null
+
       before ->
-        Cumin.storageType = storageType
+        stopSpy = sinon.spy Cumin, 'stop'
+        processQueueSpy = sinon.spy Cumin, 'processQueue'
+        Cumin.start()
 
-      describe '#add', ->
-        keys = null
+      it 'should call stop', ->
+        expect(stopSpy).to.be.called
 
+      it 'should call processQueue', ->
+        expect(processQueueSpy).to.be.called
+
+      it 'should set the interval', ->
+        expect(Cumin.interval).to.exist
+
+    describe '#processQueue', ->
+      requestSpy = null
+
+      before ->
+        requestSpy = sinon.spy Cumin, 'request'
+        Cumin.add 'processQueue1'
+        Cumin.add 'processQueue2'
+        Cumin.processQueue()
+
+      it 'should call request for each send call', ->
+        expect(requestSpy).to.be.called.twice
+
+    describe '#stop', ->
+      before ->
+        Cumin.interval = setInterval ->
+        Cumin.stop()
+
+      it 'should clear the interval', ->
+        expect(Cumin.interval).to.be.null
+
+    context 'when using events', ->
+      describe 'onQueueChange', ->
         before ->
-          localStorage.setItem 'cumin.queue', JSON.stringify({})
-          Cumin.add 'add',
-            url: 'http://url'
-            data:
-              foo: 'bar'
-            type: 'POST'
-          keys = queueLength()
+          Cumin.setEvent 'onQueueChange', sinon.spy()
+          Cumin.add
+            url: 'http://onQueueChange'
 
-        it 'should add a request to the queue', ->
-          expect(keys).to.have.length(1)
-          expect(Cumin.queue()['add'].url).to.equal('http://url')
-          expect(Cumin.queue()['add'].data['foo']).to.equal('bar')
-          expect(Cumin.queue()['add'].type).to.equal('POST')
+        it 'should be called when queue changes', ->
+          expect(Cumin.events.onQueueChange).to.be.called
 
-      describe '#remove', ->
+    for storageType in ['localStorage']
+      context "when using #{storageType}", ->
         before ->
-          Cumin.add 'remove', 'foo'
-          Cumin.remove 'remove'
+          Cumin.storageType = storageType
 
-        it 'should remove the request from the queue', ->
-          expect(Cumin.queue()['remove']).to.be.undefined
+        describe '#add', ->
+          before ->
+            Cumin.clear()
+            Cumin.add 'add',
+              url: 'http://add'
+              data:
+                foo: 'bar'
+              type: 'POST'
 
-      describe '#clear', ->
-        before ->
-          Cumin.add 'clear', 'foo'
-          Cumin.clear()
+          it 'should add a request to the queue', ->
+            expect(Object.keys(Cumin.queue())).to.have.length(1)
+            expect(Cumin.queue()['add'].url).to.equal('http://add')
+            expect(Cumin.queue()['add'].data['foo']).to.equal('bar')
+            expect(Cumin.queue()['add'].type).to.equal('POST')
 
-        it 'should clear the queue', ->
-          expect(Cumin.queue()).to.be.empty
+        describe '#remove', ->
+          before ->
+            Cumin.add 'remove', 'foo'
+            Cumin.remove 'remove'
 
-      describe '#queue', ->
-        before ->
-          Cumin.add 'queue'
+          it 'should remove the request from the queue', ->
+            expect(Cumin.queue()['remove']).to.be.undefined
 
-        it 'should return an array', ->
-          expect(Cumin.queue()).to.be.an('object')
+        describe '#clear', ->
+          before ->
+            Cumin.add 'clear', 'foo'
+            Cumin.clear()
+
+          it 'should clear the queue', ->
+            expect(Cumin.queue()).to.be.empty
+
+        describe '#queue', ->
+          before ->
+            Cumin.add 'queue'
+
+          it 'should return an array', ->
+            expect(Cumin.queue()).to.be.an('object')
