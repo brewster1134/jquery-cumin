@@ -3,15 +3,22 @@ A way to queue requests when offline.
 
 ## Usage
 
-### Dependencies
+#### Dependencies
 * [jQuery](http://jquery.com)
 
-### Optional
+#### Optional
 * [Modernizr](http://modernizr.com)
 
-### Methods
+#### Quick Examples
+_Queing form POST requests_
+```coffee
+$('#form).submit (e) ->
+  e.preventDefault()
+  Cumin.send @attr('action'), @serialize(), 'POST'
+```
+#### Methods
 
-#### Cumin.send
+###### Cumin.send
 Adds a request to the queue
 
 * param url     [String]  The URL to request
@@ -20,37 +27,37 @@ Adds a request to the queue
 * param method  [String]  Http request methods ('GET', 'POST', etc.)
   * default: 'GET'
 
-```js
-Cumin.send('http://url.com', {
+```coffee
+Cumin.send 'http://url.com',
   foo: 'bar'
-}, 'POST');
+, 'POST'
 ```
 
-#### Cumin.set & Cumin.setEvent
+###### Cumin.set & Cumin.setEvent
 Sets events and settings
 
 * param key   [String]  The name of the setting or event
 * param value [String]  The value of the setting or event
 
-```js
-Cumin.set('foo', 'bar');
-Cumin.setEvent('onFoo', 'bar');
+```coffee
+Cumin.set 'foo', 'bar'
+Cumin.setEvent 'onFoo', 'bar'
 ```
 
-##### Supported Settings
+###### Supported Settings
 * retryInterval  [Integer] Time in milliseconds between checking if the app is connected to the internet or not
   * default: 600000                 # 10 minutes
 
-##### Supported Events
+###### Supported Events
 * onQueueChange [Function] Function to be run after any change of the queue.
 
-###### Accepted Arguments:
+Accepted Arguments:
 * queue   [Object]  The entire queue
 * type    [String]  The type of change made to the queue (add/remove)
 
 ## Development
 
-### Dependencies
+#### Dependencies
 * Ruby 1.9.3
   * [rbenv](https://github.com/sstephenson/rbenv) and [ruby-build](https://github.com/sstephenson/ruby-build)
     * `rbenv install 1.9.3`
@@ -65,7 +72,7 @@ Cumin.setEvent('onFoo', 'bar');
 * [Testem](https://github.com/airportyh/testem)
   * `npm install testem -g`
 
-### Optional
+#### Optional
 * [PhantomJS](http://phantomjs.org)
   * OS X
      * [HomeBrew](http://mxcl.github.io/homebrew/) _recommended_
@@ -73,17 +80,17 @@ Cumin.setEvent('onFoo', 'bar');
 * [Growl](http://growl.info/downloads)
   * OS X 10.8
 
-### Compiling
+#### Compiling
 Do **NOT** modify any `.js` files!  Modify the coffee files in the `src` directory.  Guard will watch for changes and compile them to the `lib` directory.
 
 `bundle exec guard`
 
-## Testing
+#### Testing
 Simply run `testem`.
 
 Run `testem -g` for Growl support.
 
-### To-Do
+## To-Do
 * Demo
 * Support Cookies as storage (if local storage isnt supported)
 * Support plain JS object as storage (if cookies arent supported)
