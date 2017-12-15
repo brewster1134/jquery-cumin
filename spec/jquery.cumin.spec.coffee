@@ -45,6 +45,7 @@ describe 'Cumin', ->
         removeSpy = sinon.spy Cumin, 'remove'
 
       after ->
+        Cumin.clear()
         server.restore()
         addSpy.restore()
         removeSpy.restore()
@@ -108,8 +109,8 @@ describe 'Cumin', ->
 
       before ->
         requestSpy = sinon.spy Cumin, 'request'
-        Cumin.add 'processQueue1'
-        Cumin.add 'processQueue2'
+        Cumin.add 'fooId', 'fooRequest'
+        Cumin.add 'barId', 'barRequest'
         Cumin.processQueue()
 
       it 'should call request for each send call', ->
