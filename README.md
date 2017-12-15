@@ -58,20 +58,21 @@ Accepted Arguments:
 ## Development
 
 #### Dependencies
+* coffeescript `npm install -g coffeescript`
 * node `brew install node`
 * testem `npm install -g testem`
-* coffeescript `npm install -g coffeescript`
+* yarn `brew install yarn`
+
+Run `yarn` to install remaining dependencies
 
 #### Optional
 * phantomjs `brew install phantomjs`
 
 #### Compiling
-Do **NOT** modify any `.js` files!  Modify the coffee files in the `src` directory.  Testem will watch for changes and compile them to the `lib` directory.
-
-`bundle exec guard`
+Do **NOT** modify any `.js` files!  Modify the coffee files in the `src` and `spec` directories.  Testem will watch for changes and compile them to the `lib` and `.tmp` directories.
 
 #### Testing
-Simply run `testem`.
+Simply run `testem`
 
 ## To-Do
 * Demo

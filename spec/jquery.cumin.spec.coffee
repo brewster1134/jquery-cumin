@@ -31,7 +31,7 @@ describe 'Cumin', ->
         requestStub.restore()
 
       it 'should send a request', ->
-        expect(requestStub).to.be.called.once
+        expect(requestStub).to.be.calledOnce
 
   context 'Private Methods', ->
     describe '#request', ->
@@ -113,7 +113,7 @@ describe 'Cumin', ->
         Cumin.processQueue()
 
       it 'should call request for each send call', ->
-        expect(requestSpy).to.be.called.twice
+        expect(requestSpy).to.be.calledTwice
 
     describe '#stop', ->
       before ->

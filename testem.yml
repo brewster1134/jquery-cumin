@@ -6,8 +6,8 @@ src_files:
 serve_files:
   - .tmp/*.spec.js
   - lib/*.js
+  - node_modules/**/*.js
   - spec/index.html
-  - spec/vendor/*.js
 launch_in_dev:
   - phantomjs
 launch_in_ci:

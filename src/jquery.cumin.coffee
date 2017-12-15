@@ -1,7 +1,7 @@
 ###
 jquery.cumin
 https://github.com/brewster1134/jquery.cumin
-@version 0.0.4
+@version 0.0.5
 @author Ryan Brewster (@brewster1134)
 ###
 
