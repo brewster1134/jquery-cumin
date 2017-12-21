@@ -4,22 +4,6 @@ describe 'Cumin', ->
     expect(Cumin.storageType).to.be.a('string')
 
   context 'Public Methods', ->
-    describe '#set', ->
-      before ->
-        Cumin.set 'foo', 'bar'
-
-      it 'should set settings', ->
-        expect(Cumin.settings.foo).to.exist
-        expect(Cumin.settings.foo).to.equal('bar')
-
-    describe '#setEvent', ->
-      before ->
-        Cumin.setEvent 'onFoo', 'bar'
-
-      it 'should set settings', ->
-        expect(Cumin.events.onFoo).to.exist
-        expect(Cumin.events.onFoo).to.equal('bar')
-
     describe '#send', ->
       requestStub = null
 

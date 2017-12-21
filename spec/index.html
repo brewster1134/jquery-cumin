@@ -1,6 +1,10 @@
 <html>
   <head>
     <link rel="stylesheet" href="/testem/mocha.css">
+  </head>
+  <body>
+    <div id='mocha'></div>
+
     <script src="/node_modules/jquery/dist/jquery.min.js"></script>
     <script src="/testem/mocha.js"></script>
     <script src="/testem.js"></script>
@@ -20,9 +24,6 @@
     <script src="/.tmp/spec_helper.js"></script>
     <script src="/.tmp/jquery.cumin.spec.js"></script>
 
-  </head>
-  <body>
-    <div id='mocha'></div>
     <script>
       mocha.run();
     </script>

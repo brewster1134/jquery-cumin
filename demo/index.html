@@ -1,8 +1,45 @@
 <html>
   <head>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="../lib/jquery.cumin.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <style>
+      body {
+        padding: 5% 15%;
+      }
+      #q {
+        border: 1px solid black;
+        padding: 1em;
+      }
+      #online-status span{
+        display: inline-block;
+        border-radius: 100%;
+        background: lightgrey;
+        height: 1em;
+        width: 1em;
+      }
+    </style>
   </head>
   <body>
+    <form name="demo" action="http://localhost">
+      <div id="online-status">Online Status: <span></span></div>
+      <div id="q-count">Items in Queue: <span>?</span></div>
+      <br/>
+      <label for="text">Text</label>
+      <input id="text" name="text"/>
+      <br/>
+      <button type="submit">Add to Queue</button>
+      <br/>
+      <br/>
+      <button id='start-q'>Process Queue</button>
+      <button id='clear-q'>Clear Queue</button>
+      <br/>
+      <br/>
+      <h3>Queue</h3>
+      <ul id="q"/>
+    </form>
+
+    <!-- JAVASCRIPT -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="../lib/jquery.cumin.js"></script>
+    <script src="jquery.cumin.demo.js"></script>
   </body>
 </html>

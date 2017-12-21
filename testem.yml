@@ -1,10 +1,11 @@
-before_tests: coffee --no-header -bc -o lib src/*.coffee && coffee --no-header -bc -o .tmp spec/*.coffee
+before_tests: coffee --no-header -bc -o lib src/*.coffee && coffee --no-header -bc -o .tmp spec/*.coffee && coffee --no-header -bc -o demo demo/*.coffee
 test_page: spec/index.html
 src_files:
   - spec/*.spec.coffee
   - src/*.coffee
 serve_files:
   - .tmp/*.spec.js
+  - demo/*.js
   - lib/*.js
   - node_modules/**/*.js
   - spec/index.html
